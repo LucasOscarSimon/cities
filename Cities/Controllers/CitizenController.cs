@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
+using Entities;
 using Entities.DataTransferObjects;
 using Entities.Extensions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
@@ -53,43 +50,37 @@ namespace Cities.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] AuthenticateModel model)
         {
-            var citizen = _repository.Citizens.Authenticate(model.Username, model.Password);
-
-            if (citizen == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, citizen.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                var citizen = _repository.Citizens.Authenticate(model.Username, model.Password);
 
-            // return basic user info and authentication token
-            return Ok(new
+                if (citizen == null)
+                    return BadRequest(new { message = "Username or password is incorrect" });
+
+                _logger.LogInfo($"Citizen successfully authenticated.");
+                return Ok(citizen);
+            }
+            catch (Exception ex)
             {
-                citizen.Id,
-                Username = citizen.FullName,
-                Token = tokenString
-            });
+                _logger.LogError($"Something went wrong inside GetAllAsync action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+
         }
 
         /// <summary>
         /// Returns all registered citizens
         /// </summary>
         /// <returns>All the registered citizens</returns>
+        [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public async Task<IActionResult> GetAllCitizens()
         {
             try
             {
+                if (!User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 var citizens = await _repository.Citizens.GetAllAsync();
                 foreach (var citizen in citizens)
                     citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
@@ -116,6 +107,13 @@ namespace Cities.Controllers
         {
             try
             {
+                if (User == null)
+                    return Unauthorized();
+                
+                var currentUserId = int.Parse(User.Identity.Name);
+                if (id != currentUserId && !User.IsInRole(Role.Admin))
+                    return Forbid();
+
                 var citizen = await _repository.Citizens.GetByIdAsync(id);
                 citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
 
@@ -127,9 +125,10 @@ namespace Cities.Controllers
                 }
 
                 var citizenDto = _mapper.Map<CitizenDto>(citizen);
-                
+
                 _logger.LogInfo($"Returned citizen with id: {id}");
                 return Ok(citizenDto);
+
             }
             catch (Exception ex)
             {

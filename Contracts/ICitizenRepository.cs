@@ -6,7 +6,7 @@ namespace Contracts
 {
     public interface ICitizenRepository : IRepositoryBase<Citizen>
     {
-        Citizen Authenticate(string userName, string password);
+        Citizen Authenticate(string email, string password);
         Task<IEnumerable<Citizen>> GetAllAsync();
         Task<Citizen> GetByIdAsync(int citizenId);
         Task CreateAsync(Citizen citizen, string password);

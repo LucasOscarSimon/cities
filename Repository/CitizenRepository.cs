@@ -1,35 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Contracts;
 using Entities;
 using Entities.Extensions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Repository
 {
     public class CitizenRepository : RepositoryBase<Citizen>, ICitizenRepository
     {
-        public CitizenRepository(RepositoryContext repositoryContext)
+        private readonly AppSettings _appSettings;
+
+        public CitizenRepository(RepositoryContext repositoryContext, IOptions<AppSettings> appSettings)
             : base(repositoryContext)
         {
+            _appSettings = appSettings.Value;
         }
 
-        public Citizen Authenticate(string userName, string password)
+        public Citizen Authenticate(string email, string password)
         {
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
-            var citizen = RepositoryContext.Citizens.SingleOrDefault(x => x.FullName == userName);
+            var citizen = RepositoryContext.Citizens.SingleOrDefault(x => x.Email == email);
 
             // check if citizen exists
             if (citizen.IsObjectNull())
                 return null;
 
-            // check if password is correct & authenticate!
-            return !VerifyPasswordHash(password, citizen?.PasswordHash, citizen?.PasswordSalt) ? null : citizen;
+            // check if password is correct
+            if (!VerifyPasswordHash(password, citizen?.PasswordHash, citizen?.PasswordSalt))
+                return null;
+
+            // Generate JWT Token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, citizen?.Id.ToString()),
+                    new Claim(ClaimTypes.Role, citizen?.Role)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            if (citizen == null) return null;
+            
+            citizen.Token = tokenHandler.WriteToken(token);
+
+            return citizen;
+
         }
 
         public async Task<IEnumerable<Citizen>> GetAllAsync()

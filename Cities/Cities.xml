@@ -9,7 +9,7 @@
             Citizen operations
             </summary>
         </member>
-        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper,Microsoft.Extensions.Options.IOptions{Cities.AppSettings})">
+        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper,Microsoft.Extensions.Options.IOptions{Entities.AppSettings})">
             <summary>
             Constructor with 3 parameters that will help logging comments, get database data and map into other entities
             </summary>
@@ -136,13 +136,13 @@
         </member>
         <member name="M:Cities.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
-            Here you can configure different services like entity framework
+            This method gets called by the runtime. Use this method to add services to the container.
             </summary>
             <param name="services"></param>
         </member>
         <member name="M:Cities.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary>
-            A method that allows you to configure the middlewares
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             </summary>
             <param name="app"></param>
             <param name="env"></param>

@@ -1,20 +1,13 @@
 using System;
 using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Cities.Extensions;
-using Contracts;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using NLog;
 
@@ -40,9 +33,8 @@ namespace Cities
         /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         /// <summary>
-        /// Here you can configure different services like entity framework
+        /// This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
@@ -56,68 +48,18 @@ namespace Cities
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
-            services.ConfigureCitizenRepository();
+            services.ConfigureAppSettings(Configuration);
             services.ConfigureRepositoryWrapper();
+            services.ConfigureRepositories();
             services.ConfigureDbContext(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
-
-
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = context =>
-                        {
-                            var citizenRepository = context.HttpContext.RequestServices.GetRequiredService<ICitizenRepository>();
-                            var citizenId = int.Parse(context.Principal.Identity.Name ?? string.Empty);
-                            var citizen = citizenRepository.GetByIdAsync(citizenId);
-                            if (citizen == null)
-                            {
-                                // return unauthorized if citizen no longer exists
-                                context.Fail("Unauthorized");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
-
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "World Citizens",
-                    Description = "World Citizens API with ASP.NET Core 3.0",
-                });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
+            services.ConfigureAuthentication(Configuration);
+            services.ConfigureSwagger();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// <summary>
-        /// A method that allows you to configure the middlewares
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>

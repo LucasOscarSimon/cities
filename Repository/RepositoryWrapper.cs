@@ -6,18 +6,16 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private readonly RepositoryContext _repoContext;
-        private ICitizenRepository _citizen;
-        private ICityRepository _city;
-        private IStateRepository _state;
+        public ICitizenRepository Citizens { get; }
+        public ICityRepository Cities { get; }
+        public IStateRepository States { get; }
 
-        // When property is required if it's null, create a new one
-        public ICitizenRepository Citizens => _citizen ??= new CitizenRepository(_repoContext);
-        public ICityRepository Cities => _city ??= new CityRepository(_repoContext);
-        public IStateRepository States => _state ??= new StateRepository(_repoContext);
-
-        public RepositoryWrapper(RepositoryContext repositoryContext)
+        public RepositoryWrapper(RepositoryContext repositoryContext, ICitizenRepository citizenRepository, ICityRepository cityRepository, IStateRepository stateRepository)
         {
             _repoContext = repositoryContext;
+            Citizens = citizenRepository;
+            Cities = cityRepository;
+            States = stateRepository;
         }
 
         public void Save()
