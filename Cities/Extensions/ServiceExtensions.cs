@@ -46,5 +46,7 @@ namespace Cities.Extensions
             var connectionString = config["connectionString:MyConnection"];
             services.AddDbContext<RepositoryContext>(o => o.UseSqlServer(connectionString));
         }
+
+
     }
 }

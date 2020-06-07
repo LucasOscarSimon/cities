@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cities</name>
+    </assembly>
+    <members>
+        <member name="T:Cities.Controllers.CitizenController">
+            <summary>
+            Citizen operations
+            </summary>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper)">
+            <summary>
+            Constructor with 3 parameters that will help logging comments, get database data and map into other entities
+            </summary>
+            <param name="logger"></param>
+            <param name="repository"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.GetAllCitizens">
+            <summary>
+            Returns all registered citizens
+            </summary>
+            <returns>All the registered citizens</returns>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.GetCitizenById(System.Int32)">
+            <summary>
+            Returns a specific citizen  
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.CreateCitizen(Entities.DataTransferObjects.CitizenWithoutIdForCreateDto)">
+            <summary>
+            Creates a citizen
+            </summary>
+            <param name="citizenDto"></param>
+            <returns>Status Code 200</returns>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.UpdateCitizen(System.Int32,Entities.DataTransferObjects.CitizenWithoutIdDto)">
+            <summary>
+            Updates a citizen
+            </summary>
+            <param name="id"></param>
+            <param name="citizenDto"></param>
+            <returns>No content</returns>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.DeleteCitizen(System.Int32)">
+            <summary>
+            Deletes a citizen
+            </summary>
+            <param name="id"></param>
+            <returns>No content</returns>
+        </member>
+    </members>
+</doc>

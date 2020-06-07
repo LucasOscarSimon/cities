@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
+using Entities.Models;
 
-namespace Entities.Models
+namespace Entities.DataTransferObjects
 {
-    public class City : ICity
+    public class CityWithoutId
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<Citizen> Citizens { get; set; }
-        public int? StateId { get; set; }
         public State State { get; set; }
-        public bool IsActive { get; set; }
     }
 }
