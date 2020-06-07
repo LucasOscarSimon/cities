@@ -38,6 +38,12 @@ namespace Cities.Extensions
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
+        }
+
+        public static void ConfigureCitizenRepository(this IServiceCollection services)
+        {
+            services.AddScoped<ICitizenRepository, CitizenRepository>();
         }
 
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)

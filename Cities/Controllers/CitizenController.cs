@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
@@ -7,12 +10,16 @@ using Entities.DataTransferObjects;
 using Entities.Extensions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace Cities.Controllers
 {
     /// <summary>
     /// Citizen operations
     /// </summary>
+    [Authorize]
     [Route("api/citizen")]
     [ApiController]
     public class CitizenController : ControllerBase
@@ -20,6 +27,7 @@ namespace Cities.Controllers
         private readonly ILoggerManager _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
+        private readonly AppSettings _appSettings;
 
         /// <summary>
         /// Constructor with 3 parameters that will help logging comments, get database data and map into other entities
@@ -27,11 +35,50 @@ namespace Cities.Controllers
         /// <param name="logger"></param>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
-        public CitizenController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper)
+        /// <param name="appSettings"></param>
+        public CitizenController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _logger = logger;
             _repository = repository;
             _mapper = mapper;
+            _appSettings = appSettings.Value;
+        }
+
+        /// <summary>
+        /// Authenticates the user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody] AuthenticateModel model)
+        {
+            var citizen = _repository.Citizens.Authenticate(model.Username, model.Password);
+
+            if (citizen == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, citizen.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            // return basic user info and authentication token
+            return Ok(new
+            {
+                citizen.Id,
+                Username = citizen.FullName,
+                Token = tokenString
+            });
         }
 
         /// <summary>
@@ -96,8 +143,9 @@ namespace Cities.Controllers
         /// </summary>
         /// <param name="citizenDto"></param>
         /// <returns>Status Code 200</returns>
+        [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> CreateCitizen([FromBody] CitizenWithoutIdForCreateDto citizenDto)
+        public async Task<IActionResult> Register([FromBody] CitizenWithoutIdForCreateDto citizenDto)
         {
             try
             {
@@ -114,7 +162,7 @@ namespace Cities.Controllers
                 }
 
                 var citizen = _mapper.Map<CitizenWithoutIdForCreateDto, Citizen>(citizenDto);
-                await _repository.Citizens.CreateAsync(citizen);
+                await _repository.Citizens.CreateAsync(citizen, citizenDto.Password);
 
                 return Ok();
             }
@@ -158,7 +206,7 @@ namespace Cities.Controllers
 
                 var citizen = _mapper.Map<CitizenWithoutIdDto, Citizen>(citizenDto);
 
-                await _repository.Citizens.UpdateAsync(dbCitizen, citizen);
+                await _repository.Citizens.UpdateAsync(dbCitizen, citizen, citizenDto.Password);
 
                 return NoContent();
             }

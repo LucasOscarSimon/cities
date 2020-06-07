@@ -9,13 +9,21 @@
             Citizen operations
             </summary>
         </member>
-        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper)">
+        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper,Microsoft.Extensions.Options.IOptions{Cities.AppSettings})">
             <summary>
             Constructor with 3 parameters that will help logging comments, get database data and map into other entities
             </summary>
             <param name="logger"></param>
             <param name="repository"></param>
             <param name="mapper"></param>
+            <param name="appSettings"></param>
+        </member>
+        <member name="M:Cities.Controllers.CitizenController.Authenticate(Entities.Models.AuthenticateModel)">
+            <summary>
+            Authenticates the user
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
         </member>
         <member name="M:Cities.Controllers.CitizenController.GetAllCitizens">
             <summary>
@@ -30,7 +38,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:Cities.Controllers.CitizenController.CreateCitizen(Entities.DataTransferObjects.CitizenWithoutIdForCreateDto)">
+        <member name="M:Cities.Controllers.CitizenController.Register(Entities.DataTransferObjects.CitizenWithoutIdForCreateDto)">
             <summary>
             Creates a citizen
             </summary>
@@ -109,6 +117,35 @@
             <summary>
             All mapped classes go inside this method
             </summary>
+        </member>
+        <member name="T:Cities.Startup">
+            <summary>
+            Here you should configure the middlewares and different services.
+            </summary>
+        </member>
+        <member name="M:Cities.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor of the class
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:Cities.Startup.Configuration">
+            <summary>
+            Property of Net Core that allows you to configure
+            </summary>
+        </member>
+        <member name="M:Cities.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Here you can configure different services like entity framework
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Cities.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            A method that allows you to configure the middlewares
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
         </member>
     </members>
 </doc>
