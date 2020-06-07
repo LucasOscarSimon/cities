@@ -52,5 +52,63 @@
             <param name="id"></param>
             <returns>No content</returns>
         </member>
+        <member name="T:Cities.Controllers.CityController">
+            <summary>
+            City related operations
+            </summary>
+        </member>
+        <member name="M:Cities.Controllers.CityController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper)">
+            <summary>
+            Constructor that receives a logger for logging, a repository and a mapper for mapping objects
+            </summary>
+            <param name="logger"></param>
+            <param name="repository"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Cities.Controllers.CityController.GetAllCities">
+            <summary>
+            Return all the registered cities
+            </summary>
+            <returns>Return all the registered cities</returns>
+        </member>
+        <member name="M:Cities.Controllers.CityController.GetCityById(System.Int32)">
+            <summary>
+            Returns the requested city
+            </summary>
+            <param name="id"></param>
+            <returns>Returns the requested city</returns>
+        </member>
+        <member name="M:Cities.Controllers.CityController.CreateCity(Entities.DataTransferObjects.CityWithoutIdForCreateDto)">
+            <summary>
+            Creates a city
+            </summary>
+            <param name="cityDto"></param>
+            <returns>Http status code 200</returns>
+        </member>
+        <member name="M:Cities.Controllers.CityController.UpdateCity(System.Int32,Entities.DataTransferObjects.CityWithoutId)">
+            <summary>
+            Updates a city
+            </summary>
+            <param name="id"></param>
+            <param name="cityDto"></param>
+            <returns>No content</returns>
+        </member>
+        <member name="M:Cities.Controllers.CityController.DeleteCity(System.Int32)">
+            <summary>
+            Deletes a city
+            </summary>
+            <param name="id"></param>
+            <returns>No content</returns>
+        </member>
+        <member name="T:Cities.Profile.MappingProfile">
+            <summary>
+            Automapper profile
+            </summary>
+        </member>
+        <member name="M:Cities.Profile.MappingProfile.#ctor">
+            <summary>
+            All mapped classes go inside this method
+            </summary>
+        </member>
     </members>
 </doc>

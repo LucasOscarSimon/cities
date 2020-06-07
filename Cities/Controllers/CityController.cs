@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Contracts;
@@ -10,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cities.Controllers
 {
+    /// <summary>
+    /// City related operations
+    /// </summary>
     [Route("api/city")]
     [ApiController]
     public class CityController : ControllerBase
@@ -18,6 +22,12 @@ namespace Cities.Controllers
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Constructor that receives a logger for logging, a repository and a mapper for mapping objects
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="repository"></param>
+        /// <param name="mapper"></param>
         public CityController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper)
         {
             _logger = logger;
@@ -25,6 +35,10 @@ namespace Cities.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Return all the registered cities
+        /// </summary>
+        /// <returns>Return all the registered cities</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllCities()
         {
@@ -32,7 +46,12 @@ namespace Cities.Controllers
             {
                 var cities = await _repository.Cities.GetAllAsync();
 
-                var citiesDtos = _mapper.Map<IEnumerable<CityDto>>(cities);
+                var citiesDtos = _mapper.Map<List<CityDto>>(cities);
+                var citizens = await _repository.Citizens.GetAllAsync();
+                var listOfCitizens = citizens.ToList();
+                foreach (var city in citiesDtos)
+                    city.Citizens = listOfCitizens.Where(c => c.CityId == city.Id).ToList();
+
                 _logger.LogInfo($"Returned all cities from database.");
 
                 return Ok(citiesDtos);
@@ -44,6 +63,11 @@ namespace Cities.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns the requested city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Returns the requested city</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCityById(int id)
         {
@@ -71,6 +95,11 @@ namespace Cities.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a city
+        /// </summary>
+        /// <param name="cityDto"></param>
+        /// <returns>Http status code 200</returns>
         [HttpPost]
         public async Task<IActionResult> CreateCity([FromBody] CityWithoutIdForCreateDto cityDto)
         {
@@ -100,6 +129,12 @@ namespace Cities.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cityDto"></param>
+        /// <returns>No content</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCity(int id, [FromBody] CityWithoutId cityDto)
         {
@@ -138,6 +173,11 @@ namespace Cities.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a city
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>No content</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCity(int id)
         {

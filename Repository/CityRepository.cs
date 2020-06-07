@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts;
 using Entities;
+using Entities.ExtendedModels;
 using Entities.Extensions;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace Repository
         public async Task<IEnumerable<City>> GetAllAsync()
         {
             return await FindAll()
-                .OrderBy(city => city.Name)
+                .OrderBy(citizen => citizen.Name)
                 .ToListAsync();
         }
 
@@ -27,6 +28,17 @@ namespace Repository
         {
             return await FindByCondition(city => city.Id.Equals(cityId))
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<CityExtended> GetCityWithDetailsAsync(int? cityId)
+        {
+            return await FindByCondition(city => city.Id.Equals(cityId))
+                .Select(city => new CityExtended(city)
+                {
+                    Citizens = RepositoryContext.Citizens
+                        .Where(a => a.CityId == cityId)
+                        .ToList()
+                }).SingleAsync();
         }
 
         public async Task CreateAsync(City city)

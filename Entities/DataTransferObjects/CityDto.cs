@@ -7,7 +7,7 @@ namespace Entities.DataTransferObjects
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Citizen> Citizens { get; set; }
-        public State State { get; set; }
+        public IEnumerable<Citizen> Citizens { get; set; }
+        public string State { get; set; }
     }
 }
