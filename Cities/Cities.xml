@@ -16,7 +16,6 @@
             <param name="logger"></param>
             <param name="repository"></param>
             <param name="mapper"></param>
-            <param name="appSettings"></param>
         </member>
         <member name="M:Cities.Controllers.CitizenController.Authenticate(Entities.Models.AuthenticateModel)">
             <summary>
@@ -108,6 +107,56 @@
             <param name="id"></param>
             <returns>No content</returns>
         </member>
+        <member name="T:Cities.Extensions.ServiceExtensions">
+            <summary>
+            Configurations related to Entity framework, Authentication and ASP.NET Core
+            </summary>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureCors(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Cross Origin Resource Shared configuration
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureIISIntegration(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            IIS Integration configuration
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureRepositoryWrapper(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            A wrapper for the repository pattern
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureRepositories(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            The repositories DI configuration
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureDbContext(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Added the DB context
+            </summary>
+            <param name="services"></param>
+            <param name="config"></param>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Authentication configuration
+            </summary>
+            <param name="services"></param>
+            <param name="config"></param>
+        </member>
+        <member name="M:Cities.Extensions.ServiceExtensions.ConfigureAppSettings(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            App.Settings configuration
+            </summary>
+            <param name="services"></param>
+            <param name="config"></param>
+        </member>
         <member name="T:Cities.Profile.MappingProfile">
             <summary>
             Automapper profile
@@ -118,9 +167,27 @@
             All mapped classes go inside this method
             </summary>
         </member>
+        <member name="T:Cities.Program">
+            <summary>
+            It creates a host for the web application
+            </summary>
+        </member>
+        <member name="M:Cities.Program.Main(System.String[])">
+            <summary>
+            Calls a CreateHostBuilder method to create and configure a builder object
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Cities.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            Creates a Generic Host using non-HTTP workload
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
         <member name="T:Cities.Startup">
             <summary>
-            Here you should configure the middlewares and different services.
+            Configures services and the apps request pipeline.
             </summary>
         </member>
         <member name="M:Cities.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">

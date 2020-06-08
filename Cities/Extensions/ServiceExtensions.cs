@@ -8,13 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Repository;
 
 namespace Cities.Extensions
 {
+    /// <summary>
+    /// Configurations related to Entity framework, Authentication and ASP.NET Core
+    /// </summary>
     public static class ServiceExtensions
     {
+        /// <summary>
+        /// Cross Origin Resource Shared configuration
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureCors(this IServiceCollection services)
         {
             services.AddCors(options =>
@@ -26,6 +32,10 @@ namespace Cities.Extensions
             });
         }
 
+        /// <summary>
+        /// IIS Integration configuration
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureIISIntegration(this IServiceCollection services)
         {
             services.Configure<IISOptions>(options =>
@@ -34,11 +44,19 @@ namespace Cities.Extensions
             });
         }
 
+        /// <summary>
+        /// A wrapper for the repository pattern
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)
         {
             services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
 
+        /// <summary>
+        /// The repositories DI configuration
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICitizenRepository, CitizenRepository>();
@@ -46,6 +64,11 @@ namespace Cities.Extensions
             services.AddScoped<IStateRepository, StateRepository>();
         }
 
+        /// <summary>
+        /// Added the DB context
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
         {
             //External DB (SQL Server)
@@ -53,6 +76,11 @@ namespace Cities.Extensions
             services.AddDbContext<RepositoryContext>(o => o.UseSqlServer(connectionString));
         }
 
+        /// <summary>
+        /// Authentication configuration
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
         public static void ConfigureAuthentication(this IServiceCollection services, IConfiguration config)
         {
             var appSettingsSection = config.GetSection("AppSettings");
@@ -93,66 +121,11 @@ namespace Cities.Extensions
                 });
         }
 
-        public static void ConfigureSwagger(this IServiceCollection services)
-        {
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo
-            //    {
-            //        Version = "v1",
-            //        Title = "World Citizens",
-            //        Description = "World Citizens API with ASP.NET Core 3.0",
-            //    });
-            //    c.AddSecurityDefinition("Bearer",
-            //        new OpenApiSecurityScheme()
-            //        {
-            //            In = ParameterLocation.Header,
-            //            Description = "Please enter into field the word 'Bearer' following by space and JWT",
-            //            Name = "Authorization",
-            //            Type = SecuritySchemeType.ApiKey
-            //        });
-            //    c.AddSecurityRequirement(new OpenApiSecurityRequirement());
-            //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //    c.IncludeXmlComments(xmlPath);
-            //});
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "World Citizens",
-                    Description = "World Citizens API with ASP.NET Core 3.0",
-                });
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme."
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] {}
-
-                    }
-                });
-            });
-        }
-
+        /// <summary>
+        /// App.Settings configuration
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
         public static void ConfigureAppSettings(this IServiceCollection services, IConfiguration config)
         {
             services.Configure<AppSettings>(options => config.GetSection("MySettings").Bind(options));

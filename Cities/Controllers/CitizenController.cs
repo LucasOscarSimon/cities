@@ -32,7 +32,6 @@ namespace Cities.Controllers
         /// <param name="logger"></param>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
-        /// <param name="appSettings"></param>
         public CitizenController(IRepositoryWrapper repository, IMapper mapper, ILoggerFactory logger)
         {
             _repository = repository;
@@ -73,6 +72,7 @@ namespace Cities.Controllers
         /// Returns all registered citizens
         /// </summary>
         /// <returns>All the registered citizens</returns>
+        [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public async Task<IActionResult> GetAllCitizens()
         {

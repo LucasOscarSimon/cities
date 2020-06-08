@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace Cities
 {
     /// <summary>
-    /// Here you should configure the middlewares and different services.
+    /// Configures services and the apps request pipeline.
     /// </summary>
     public class Startup
     {
@@ -50,7 +50,6 @@ namespace Cities
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.ConfigureAuthentication(Configuration);
-            services.ConfigureSwagger();
         }
 
         /// <summary>
@@ -80,12 +79,6 @@ namespace Cities
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "World Citizens API V1");
-            });
         }
     }
 }
