@@ -8,6 +8,7 @@ using Entities.DataTransferObjects;
 using Entities.Extensions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Cities.Controllers
 {
@@ -18,7 +19,7 @@ namespace Cities.Controllers
     [ApiController]
     public class CityController : ControllerBase
     {
-        private readonly ILoggerManager _logger;
+        private readonly ILogger _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
 
@@ -28,9 +29,9 @@ namespace Cities.Controllers
         /// <param name="logger"></param>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
-        public CityController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper)
+        public CityController(ILoggerFactory logger, IRepositoryWrapper repository, IMapper mapper)
         {
-            _logger = logger;
+            _logger = logger.CreateLogger("CitiLoggerAPI");
             _repository = repository;
             _mapper = mapper;
         }
@@ -52,7 +53,7 @@ namespace Cities.Controllers
                 foreach (var city in citiesDtos)
                     city.Citizens = listOfCitizens.Where(c => c.CityId == city.Id).ToList();
 
-                _logger.LogInfo($"Returned all cities from database.");
+                _logger.LogInformation($"Returned all cities from database.");
 
                 return Ok(citiesDtos);
             }
@@ -85,7 +86,7 @@ namespace Cities.Controllers
 
                 var cityDto = _mapper.Map<CityDto>(city);
 
-                _logger.LogInfo($"Returned city with id: {id}");
+                _logger.LogInformation($"Returned city with id: {id}");
                 return Ok(cityDto);
             }
             catch (Exception ex)

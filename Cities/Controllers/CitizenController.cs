@@ -9,6 +9,7 @@ using Entities.Extensions;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Cities.Controllers
@@ -21,10 +22,9 @@ namespace Cities.Controllers
     [ApiController]
     public class CitizenController : ControllerBase
     {
-        private readonly ILoggerManager _logger;
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Constructor with 3 parameters that will help logging comments, get database data and map into other entities
@@ -33,12 +33,11 @@ namespace Cities.Controllers
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
         /// <param name="appSettings"></param>
-        public CitizenController(ILoggerManager logger, IRepositoryWrapper repository, IMapper mapper, IOptions<AppSettings> appSettings)
+        public CitizenController(IRepositoryWrapper repository, IMapper mapper, ILoggerFactory logger)
         {
-            _logger = logger;
             _repository = repository;
             _mapper = mapper;
-            _appSettings = appSettings.Value;
+            _logger = logger.CreateLogger("CitizensLoggerApi");
         }
 
         /// <summary>
@@ -48,17 +47,19 @@ namespace Cities.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] AuthenticateModel model)
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateModel model)
         {
             try
             {
-                var citizen = _repository.Citizens.Authenticate(model.Username, model.Password);
-
+                var citizen =  _repository.Citizens.Authenticate(model.Username, model.Password);
                 if (citizen == null)
                     return BadRequest(new { message = "Username or password is incorrect" });
 
-                _logger.LogInfo($"Citizen successfully authenticated.");
-                return Ok(citizen);
+                citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
+                var citizenDto = _mapper.Map<AuthenticatedCitizenDto>(citizen);
+
+                _logger.LogInformation($"Citizen successfully authenticated.");
+                return Ok(citizenDto);
             }
             catch (Exception ex)
             {
@@ -72,21 +73,17 @@ namespace Cities.Controllers
         /// Returns all registered citizens
         /// </summary>
         /// <returns>All the registered citizens</returns>
-        [Authorize(Roles = Role.Admin)]
         [HttpGet]
         public async Task<IActionResult> GetAllCitizens()
         {
             try
             {
-                if (!User.IsInRole(Role.Admin))
-                    return Forbid();
-
                 var citizens = await _repository.Citizens.GetAllAsync();
                 foreach (var citizen in citizens)
                     citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
 
                 var citizenDtos = _mapper.Map<IEnumerable<CitizenDto>>(citizens);
-                _logger.LogInfo($"Returned all citizens from database.");
+                _logger.LogInformation($"Returned all citizens from database.");
 
                 return Ok(citizenDtos);
             }
@@ -126,7 +123,7 @@ namespace Cities.Controllers
 
                 var citizenDto = _mapper.Map<CitizenDto>(citizen);
 
-                _logger.LogInfo($"Returned citizen with id: {id}");
+                _logger.LogInformation($"Returned citizen with id: {id}");
                 return Ok(citizenDto);
 
             }
@@ -143,7 +140,7 @@ namespace Cities.Controllers
         /// <param name="citizenDto"></param>
         /// <returns>Status Code 200</returns>
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CitizenWithoutIdForCreateDto citizenDto)
         {
             try

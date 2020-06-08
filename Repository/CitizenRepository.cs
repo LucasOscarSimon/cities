@@ -58,7 +58,7 @@ namespace Repository
             
             citizen.Token = tokenHandler.WriteToken(token);
 
-            return citizen;
+            return citizen.WithoutPassword();
 
         }
 
@@ -95,10 +95,6 @@ namespace Repository
 
         public async Task UpdateAsync(Citizen dbCitizen, Citizen citizen, string password = null)
         {
-            var citizenExists = FindByCondition(c => c.FullName == citizen.FullName);
-            if(citizenExists == null)
-                throw new Exception("Citizen not found");
-
             if (!string.IsNullOrWhiteSpace(password))
             {
                 CreatePasswordHash(password, out var passwordHash, out var passwordSalt);

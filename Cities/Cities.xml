@@ -9,7 +9,7 @@
             Citizen operations
             </summary>
         </member>
-        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper,Microsoft.Extensions.Options.IOptions{Entities.AppSettings})">
+        <member name="M:Cities.Controllers.CitizenController.#ctor(Contracts.IRepositoryWrapper,AutoMapper.IMapper,Microsoft.Extensions.Logging.ILoggerFactory)">
             <summary>
             Constructor with 3 parameters that will help logging comments, get database data and map into other entities
             </summary>
@@ -65,7 +65,7 @@
             City related operations
             </summary>
         </member>
-        <member name="M:Cities.Controllers.CityController.#ctor(Contracts.ILoggerManager,Contracts.IRepositoryWrapper,AutoMapper.IMapper)">
+        <member name="M:Cities.Controllers.CityController.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,Contracts.IRepositoryWrapper,AutoMapper.IMapper)">
             <summary>
             Constructor that receives a logger for logging, a repository and a mapper for mapping objects
             </summary>

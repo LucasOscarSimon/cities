@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using AutoMapper;
 using Cities.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -9,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using NLog;
 
 namespace Cities
 {
@@ -24,7 +21,6 @@ namespace Cities
         /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
-            LogManager.LoadConfiguration(String.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -47,7 +43,6 @@ namespace Cities
 
             services.ConfigureCors();
             services.ConfigureIISIntegration();
-            services.ConfigureLoggerService();
             services.ConfigureAppSettings(Configuration);
             services.ConfigureRepositoryWrapper();
             services.ConfigureRepositories();
@@ -69,7 +64,7 @@ namespace Cities
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -1,11 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
 using Contracts;
 using Entities;
-using LoggerService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -36,11 +32,6 @@ namespace Cities.Extensions
             {
 
             });
-        }
-
-        public static void ConfigureLoggerService(this IServiceCollection services)
-        {
-            services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 
         public static void ConfigureRepositoryWrapper(this IServiceCollection services)
@@ -104,6 +95,27 @@ namespace Cities.Extensions
 
         public static void ConfigureSwagger(this IServiceCollection services)
         {
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo
+            //    {
+            //        Version = "v1",
+            //        Title = "World Citizens",
+            //        Description = "World Citizens API with ASP.NET Core 3.0",
+            //    });
+            //    c.AddSecurityDefinition("Bearer",
+            //        new OpenApiSecurityScheme()
+            //        {
+            //            In = ParameterLocation.Header,
+            //            Description = "Please enter into field the word 'Bearer' following by space and JWT",
+            //            Name = "Authorization",
+            //            Type = SecuritySchemeType.ApiKey
+            //        });
+            //    c.AddSecurityRequirement(new OpenApiSecurityRequirement());
+            //    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //    c.IncludeXmlComments(xmlPath);
+            //});
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -112,18 +124,32 @@ namespace Cities.Extensions
                     Title = "World Citizens",
                     Description = "World Citizens API with ASP.NET Core 3.0",
                 });
-                c.AddSecurityDefinition("Bearer",
-                    new OpenApiSecurityScheme()
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                     {
-                        In = ParameterLocation.Header,
-                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.ApiKey
-                    });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement());
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+
+                    }
+                });
             });
         }
 

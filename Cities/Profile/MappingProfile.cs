@@ -15,6 +15,7 @@ namespace Cities.Profile
         public MappingProfile()
         {
             CreateMap<Citizen, CitizenDto>().ForMember(c => c.City, m=>m.MapFrom(c => c.City.Name)).ReverseMap();
+            CreateMap<Citizen, AuthenticatedCitizenDto>().ForMember(c => c.City, m => m.MapFrom(c => c.City.Name)).ReverseMap();
             CreateMap<Citizen, CitizenWithoutIdDto>().ReverseMap();
             CreateMap<Citizen, CitizenWithoutIdForCreateDto>().ReverseMap();
             CreateMap<City, CityDto>().ForMember(c => c.State, m => m.MapFrom(c => c.State.Name)).ReverseMap();
