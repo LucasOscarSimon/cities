@@ -29,6 +29,7 @@ namespace Cities.Profile
             CreateMap<User, AuthenticateDto>().ReverseMap();
             CreateMap<User, UserWithoutIdDto>().ReverseMap();
             CreateMap<User, UserWithoutIdForCreateDto>().ReverseMap();
+            CreateMap<Citizen, UserWithoutIdForCreateDto>().ForMember(c => c.CityId, m => m.MapFrom(c => c.CityId)).ReverseMap();
         }
     }
 }

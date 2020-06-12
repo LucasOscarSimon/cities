@@ -63,14 +63,14 @@ namespace Repository
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await FindAll().Include(u => u.Citizen)
+            return await FindAll().Where(u => u.IsActive).Include(u => u.Citizen)
                 .OrderBy(user => user.UserName)
                 .ToListAsync();
         }
 
         public async Task<User> GetByIdAsync(int userId)
         {
-            return await FindByCondition(user => user.Id.Equals(userId)).Include(u => u.Citizen)
+            return await FindByCondition(user => user.Id.Equals(userId) && user.IsActive).Include(u => u.Citizen)
                 .FirstOrDefaultAsync();
         }
 

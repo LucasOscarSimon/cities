@@ -146,7 +146,10 @@ namespace Cities.Controllers
                 }
 
                 var user = _mapper.Map<UserWithoutIdForCreateDto, User>(userDto);
+                var citizen = _mapper.Map<UserWithoutIdForCreateDto, Citizen>(userDto);
                 await _repository.Users.CreateAsync(user, userDto.Password);
+                citizen.UserId = user.Id;
+                await _repository.Citizens.CreateAsync(citizen);
 
                 return Ok();
             }
