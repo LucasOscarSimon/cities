@@ -23,6 +23,12 @@ namespace Cities.Profile
             CreateMap<City, CityWithoutId>().ReverseMap();
             CreateMap<City, CityWithoutIdForCreateDto>().ReverseMap();
             CreateMap<State, StateDto>().ReverseMap();
+            CreateMap<State, StateWithoutId>().ReverseMap();
+            CreateMap<State, StateWithoutIdForCreateDto>().ReverseMap();
+            CreateMap<User, AuthenticatedDto>().ReverseMap();
+            CreateMap<User, AuthenticateDto>().ReverseMap();
+            CreateMap<User, UserWithoutIdDto>().ReverseMap();
+            CreateMap<User, UserWithoutIdForCreateDto>().ReverseMap();
         }
     }
 }

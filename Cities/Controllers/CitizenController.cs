@@ -40,35 +40,6 @@ namespace Cities.Controllers
         }
 
         /// <summary>
-        /// Authenticates the user
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateModel model)
-        {
-            try
-            {
-                var citizen =  _repository.Citizens.Authenticate(model.Username, model.Password);
-                if (citizen == null)
-                    return BadRequest(new { message = "Username or password is incorrect" });
-
-                citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
-                var citizenDto = _mapper.Map<AuthenticatedCitizenDto>(citizen);
-
-                _logger.LogInformation($"Citizen successfully authenticated.");
-                return Ok(citizenDto);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside GetAllAsync action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
-
-        }
-
-        /// <summary>
         /// Returns all registered citizens
         /// </summary>
         /// <returns>All the registered citizens</returns>
@@ -79,8 +50,6 @@ namespace Cities.Controllers
             try
             {
                 var citizens = await _repository.Citizens.GetAllAsync();
-                foreach (var citizen in citizens)
-                    citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
 
                 var citizenDtos = _mapper.Map<IEnumerable<CitizenDto>>(citizens);
                 _logger.LogInformation($"Returned all citizens from database.");
@@ -106,10 +75,10 @@ namespace Cities.Controllers
             {
                 if (User == null)
                     return Unauthorized();
-                
-                var currentUserId = int.Parse(User.Identity.Name);
-                if (id != currentUserId && !User.IsInRole(Role.Admin))
-                    return Forbid();
+                //
+                // var currentUserId = int.Parse(User.Identity.Name);
+                // if (id != currentUserId && !User.IsInRole(Role.Admin))
+                //     return Forbid();
 
                 var citizen = await _repository.Citizens.GetByIdAsync(id);
                 citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
@@ -140,12 +109,12 @@ namespace Cities.Controllers
         /// <param name="citizenDto"></param>
         /// <returns>Status Code 200</returns>
         [AllowAnonymous]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] CitizenWithoutIdForCreateDto citizenDto)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create([FromBody] CitizenWithoutIdForCreateDto citizenDto)
         {
             try
             {
-                if (citizenDto == null)
+                if (citizenDto is null)
                 {
                     _logger.LogError("Citizen object sent from client is null.");
                     return BadRequest("Citizen object is null");
@@ -154,11 +123,11 @@ namespace Cities.Controllers
                 if (!ModelState.IsValid)
                 {
                     _logger.LogError("Invalid citizen object sent from client.");
-                    return BadRequest("Invalid model object");
+                    return BadRequest("Invalid dto object");
                 }
 
                 var citizen = _mapper.Map<CitizenWithoutIdForCreateDto, Citizen>(citizenDto);
-                await _repository.Citizens.CreateAsync(citizen, citizenDto.Password);
+                await _repository.Citizens.CreateAsync(citizen);
 
                 return Ok();
             }
@@ -189,7 +158,7 @@ namespace Cities.Controllers
                 if (!ModelState.IsValid)
                 {
                     _logger.LogError("Invalid citizen object sent from client.");
-                    return BadRequest("Invalid model object");
+                    return BadRequest("Invalid dto object");
                 }
 
                 var dbCitizen = await _repository.Citizens.GetByIdAsync(id);
@@ -202,7 +171,7 @@ namespace Cities.Controllers
 
                 var citizen = _mapper.Map<CitizenWithoutIdDto, Citizen>(citizenDto);
 
-                await _repository.Citizens.UpdateAsync(dbCitizen, citizen, citizenDto.Password);
+                await _repository.Citizens.UpdateAsync(dbCitizen, citizen);
 
                 return NoContent();
             }

@@ -6,7 +6,7 @@ namespace Entities.Extensions
     {
         public static bool IsObjectNull(this ICity city)
         {
-            return city == null;
+            return city is null;
         }
 
         public static bool IsEmptyObject(this ICity city)

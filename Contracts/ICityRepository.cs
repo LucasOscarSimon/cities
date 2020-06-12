@@ -9,7 +9,6 @@ namespace Contracts
     {
         Task<IEnumerable<City>> GetAllAsync();
         Task<City> GetByIdAsync(int? cityId);
-        Task<CityExtended> GetCityWithDetailsAsync(int? cityId);
         Task CreateAsync(City city);
         Task UpdateAsync(City dbCity, City city);
         Task DeleteAsync(City city);

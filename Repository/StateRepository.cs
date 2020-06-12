@@ -16,36 +16,37 @@ namespace Repository
         {
         }
 
-        public async Task<IEnumerable<State>> GetAll()
+        public async Task<IEnumerable<State>> GetAllAsync()
         {
-            return await FindAll()
+            return await FindAll().Include(s => s.Cities)
                 .OrderBy(ow => ow.Name)
                 .ToListAsync();
         }
 
-        public async Task<State> GetById(int stateId)
+        public async Task<State> GetByIdAsync(int stateId)
         {
-            return await FindByCondition(owner => owner.Id.Equals(stateId))
+            return await FindByCondition(owner => owner.Id.Equals(stateId)).Include(s => s.Cities)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task CreateStateAsync(State state)
+        public async Task CreateAsync(State state)
         {
             state.IsActive = true;
             Create(state);
             await SaveAsync();
         }
 
-        public async Task UpdateStateAsync(State dbState, State state)
+        public async Task UpdateAsync(State dbState, State state)
         {
             dbState.Map(state);
             Update(dbState);
             await SaveAsync();
         }
 
-        public async Task DeleteStateAsync(State state)
+        public async Task DeleteAsync(State state)
         {
-            Delete(state);
+            state.IsActive = false;
+            Update(state);
             await SaveAsync();
         }
     }

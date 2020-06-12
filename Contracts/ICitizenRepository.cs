@@ -6,11 +6,10 @@ namespace Contracts
 {
     public interface ICitizenRepository : IRepositoryBase<Citizen>
     {
-        Citizen Authenticate(string email, string password);
         Task<IEnumerable<Citizen>> GetAllAsync();
         Task<Citizen> GetByIdAsync(int citizenId);
-        Task CreateAsync(Citizen citizen, string password);
-        Task UpdateAsync(Citizen dbCitizen, Citizen citizen, string password);
+        Task CreateAsync(Citizen citizen);
+        Task UpdateAsync(Citizen dbCitizen, Citizen citizen);
         Task DeleteAsync(Citizen citizen);
     }
 }

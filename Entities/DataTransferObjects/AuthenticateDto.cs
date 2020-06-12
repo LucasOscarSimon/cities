@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities.Models
+namespace Entities.DataTransferObjects
 {
-    public class AuthenticateModel
+    public class AuthenticateDto
     {
         [Required]
         public string Username { get; set; }

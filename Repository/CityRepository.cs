@@ -19,26 +19,15 @@ namespace Repository
 
         public async Task<IEnumerable<City>> GetAllAsync()
         {
-            return await FindAll()
+            return await FindAll().Include(c => c.Citizens)
                 .OrderBy(citizen => citizen.Name)
                 .ToListAsync();
         }
 
         public async Task<City> GetByIdAsync(int? cityId)
         {
-            return await FindByCondition(city => city.Id.Equals(cityId))
+            return await FindByCondition(city => city.Id.Equals(cityId)).Include(c=> c.Citizens)
                 .FirstOrDefaultAsync();
-        }
-
-        public async Task<CityExtended> GetCityWithDetailsAsync(int? cityId)
-        {
-            return await FindByCondition(city => city.Id.Equals(cityId))
-                .Select(city => new CityExtended(city)
-                {
-                    Citizens = RepositoryContext.Citizens
-                        .Where(a => a.CityId == cityId)
-                        .ToList()
-                }).SingleAsync();
         }
 
         public async Task CreateAsync(City city)
@@ -57,7 +46,8 @@ namespace Repository
 
         public async Task DeleteAsync(City city)
         {
-            Delete(city);
+            city.IsActive = false;
+            Update(city);
             await SaveAsync();
         }
     }

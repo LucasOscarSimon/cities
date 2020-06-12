@@ -6,7 +6,7 @@ namespace Entities.Extensions
     {
         public static bool IsObjectNull(this IState state)
         {
-            return state == null;
+            return state is null;
         }
 
         public static bool IsEmptyObject(this IState state)

@@ -62,6 +62,7 @@ namespace Cities.Extensions
             services.AddScoped<ICitizenRepository, CitizenRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         /// <summary>

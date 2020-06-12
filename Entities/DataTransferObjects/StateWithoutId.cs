@@ -3,9 +3,8 @@ using Entities.Models;
 
 namespace Entities.DataTransferObjects
 {
-    public class StateDto
+    public class StateWithoutId
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public IEnumerable<City> Cities { get; set; }
     }

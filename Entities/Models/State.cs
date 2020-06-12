@@ -2,7 +2,7 @@
 
 namespace Entities.Models
 {
-    public class State
+    public class State : IState
     {
         public int Id { get; set; }
         public string Name { get; set; }

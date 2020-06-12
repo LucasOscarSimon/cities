@@ -31,7 +31,7 @@ namespace Cities.Controllers
         /// <param name="mapper"></param>
         public CityController(ILoggerFactory logger, IRepositoryWrapper repository, IMapper mapper)
         {
-            _logger = logger.CreateLogger("CitiLoggerAPI");
+            _logger = logger.CreateLogger("CityLoggerAPI");
             _repository = repository;
             _mapper = mapper;
         }
@@ -48,10 +48,6 @@ namespace Cities.Controllers
                 var cities = await _repository.Cities.GetAllAsync();
 
                 var citiesDtos = _mapper.Map<List<CityDto>>(cities);
-                var citizens = await _repository.Citizens.GetAllAsync();
-                var listOfCitizens = citizens.ToList();
-                foreach (var city in citiesDtos)
-                    city.Citizens = listOfCitizens.Where(c => c.CityId == city.Id).ToList();
 
                 _logger.LogInformation($"Returned all cities from database.");
 
@@ -75,8 +71,6 @@ namespace Cities.Controllers
             try
             {
                 var city = await _repository.Cities.GetByIdAsync(id);
-                // city.Citizens = await _repository.Citizens.GetByIdAsync(city.);
-
 
                 if (city.IsEmptyObject())
                 {

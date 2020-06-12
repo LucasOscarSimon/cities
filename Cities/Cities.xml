@@ -17,11 +17,11 @@
             <param name="repository"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:Cities.Controllers.CitizenController.Authenticate(Entities.Models.AuthenticateModel)">
+        <member name="M:Cities.Controllers.CitizenController.Authenticate(Entities.Models.AuthenticateDto)">
             <summary>
             Authenticates the user
             </summary>
-            <param name="model"></param>
+            <param name="dto"></param>
             <returns></returns>
         </member>
         <member name="M:Cities.Controllers.CitizenController.GetAllCitizens">
