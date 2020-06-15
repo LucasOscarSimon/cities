@@ -17,8 +17,6 @@ namespace Entities.Extensions
         public static void Map(this City dbCity, City city)
         {
             dbCity.Name = city.Name;
-            dbCity.State = city.State;
-            dbCity.Citizens = city.Citizens;
             dbCity.StateId = city.StateId;
             dbCity.IsActive = city.IsActive;
         }
