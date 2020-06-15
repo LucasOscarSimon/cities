@@ -14,11 +14,12 @@ namespace Cities.Profile
         /// </summary>
         public MappingProfile()
         {
-            CreateMap<Citizen, CitizenDto>().ForMember(c => c.City, m=>m.MapFrom(c => c.City.Name)).ReverseMap();
+            CreateMap<Citizen, CitizenDto>().ForMember(c => c.City, m=>m.MapFrom(c => c.City)).ReverseMap();
             CreateMap<Citizen, AuthenticatedCitizenDto>().ForMember(c => c.City, m => m.MapFrom(c => c.City.Name)).ReverseMap();
-            CreateMap<Citizen, CitizenWithoutIdDto>().ReverseMap();
-            CreateMap<Citizen, CitizenWithoutIdForCreateDto>().ReverseMap();
             CreateMap<City, CityDto>().ForMember(c => c.State, m => m.MapFrom(c => c.State.Name)).ReverseMap();
+            CreateMap<Citizen, CitizenWithoutIdDto>().ForMember(c => c.City, m => m.MapFrom(c => c.City)).ReverseMap();
+            CreateMap<Citizen, CitizenWithoutIdForCreateDto>().ReverseMap();
+
             CreateMap<CityExtended, CityDto>().ForMember(c => c.State, m => m.MapFrom(c => c.State.Name)).ReverseMap();
             CreateMap<City, CityWithoutId>().ReverseMap();
             CreateMap<City, CityWithoutIdForCreateDto>().ReverseMap();
