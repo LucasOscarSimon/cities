@@ -2,9 +2,12 @@
 using System.Threading.Tasks;
 using Contracts;
 using Entities;
+using Entities.Configurations;
+using Entities.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -72,9 +75,30 @@ namespace Cities.Extensions
         /// <param name="config"></param>
         public static void ConfigureDbContext(this IServiceCollection services, IConfiguration config)
         {
+            services.AddSingleton<IEntityTypeConfiguration<User>, UsersConfiguration>();
+            services.AddSingleton<IEntityTypeConfiguration<Citizen>, CitizensConfiguration>();
+            services.AddSingleton<IEntityTypeConfiguration<City>, CitiesConfiguration>();
+            services.AddSingleton<IEntityTypeConfiguration<State>, StatesConfiguration>();
+            
             //External DB (SQL Server)
             var connectionString = config["connectionString:MyConnection"];
-            services.AddDbContext<RepositoryContext>(o => o.UseSqlServer(connectionString));
+            services.AddSingleton(p =>
+            {
+                var options = new DbContextOptionsBuilder<RepositoryContext>()
+                    .UseSqlServer(connectionString)
+                    .Options;
+                var repositoryContext = new RepositoryContext(options,
+                    p.GetService<IEntityTypeConfiguration<User>>(),
+                    p.GetService<IEntityTypeConfiguration<Citizen>>(),
+                    p.GetService<IEntityTypeConfiguration<City>>(),
+                    p.GetService<IEntityTypeConfiguration<State>>());
+
+                repositoryContext.Database.EnsureCreated();
+
+                repositoryContext.Database.Migrate();
+
+                return repositoryContext;
+            });
         }
 
         /// <summary>
