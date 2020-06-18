@@ -75,13 +75,9 @@ namespace Cities.Controllers
             {
                 if (User == null)
                     return Unauthorized();
-                //
-                // var currentUserId = int.Parse(User.Identity.Name);
-                // if (id != currentUserId && !User.IsInRole(Role.Admin))
-                //     return Forbid();
 
                 var citizen = await _repository.Citizens.GetByIdAsync(id);
-                citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
+                // citizen.City = await _repository.Cities.GetByIdAsync(citizen.CityId);
 
 
                 if (citizen.IsEmptyObject())

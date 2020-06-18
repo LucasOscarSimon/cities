@@ -6,7 +6,7 @@ namespace Entities.DataTransferObjects
     public class CityWithoutId
     {
         public string Name { get; set; }
-        public ICollection<Citizen> Citizens { get; set; }
+        public ICollection<CitizenDto> Citizens { get; set; }
         public State State { get; set; }
     }
 }

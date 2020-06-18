@@ -19,14 +19,18 @@ namespace Repository
 
         public async Task<IEnumerable<City>> GetAllAsync()
         {
-            return await FindAll().Include(c => c.Citizens)
+            return await FindAll()
+                .Include(c => c.State)
+                .Include(c => c.Citizens)
                 .OrderBy(citizen => citizen.Name)
                 .ToListAsync();
         }
 
         public async Task<City> GetByIdAsync(int? cityId)
         {
-            return await FindByCondition(city => city.Id.Equals(cityId)).Include(c=> c.Citizens)
+            return await FindByCondition(city => city.Id.Equals(cityId))
+                .Include(c => c.State)
+                .Include(c=> c.Citizens)
                 .FirstOrDefaultAsync();
         }
 

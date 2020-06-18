@@ -7,6 +7,6 @@ namespace Entities.DataTransferObjects
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<City> Cities { get; set; }
+        public IEnumerable<CityDto> Cities { get; set; }
     }
 }

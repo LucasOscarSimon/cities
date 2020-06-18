@@ -8,6 +8,6 @@ namespace Entities.DataTransferObjects
         public int Id { get; set; }
         public string Name { get; set; }
         public IEnumerable<CitizenDto> Citizens { get; set; }
-        public string State { get; set; }
+        public StateDto State { get; set; }
     }
 }
