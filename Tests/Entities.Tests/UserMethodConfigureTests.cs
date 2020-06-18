@@ -65,7 +65,7 @@ namespace Entities.Tests
         /// UserName property validations
         /// </summary>
         [Fact]
-        public void Must_Set_UserName_To_UserName()
+        public void Must_Set_UserName_Max_Length_250()
         {
             //arrange
 
@@ -74,7 +74,21 @@ namespace Entities.Tests
                 .FindDeclaredProperty(nameof(User.UserName));
 
             //assert
-            Assert.Equal(nameof(User.UserName), idProperty.GetColumnName());
+            Assert.Equal(250, idProperty.GetMaxLength());
+        }
+
+        [Fact]
+        public void Must_Set_UserName_To_UserName()
+        {
+            //arrange
+            const string userNamePropName = nameof(User.UserName);
+            
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredProperty(userNamePropName);
+
+            //assert
+            Assert.Equal(userNamePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -110,13 +124,14 @@ namespace Entities.Tests
         public void Must_Set_Token_To_Token()
         {
             //arrange
-
+            const string tokenName = nameof(User.Token);
+            
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(User.Token));
+                .FindDeclaredProperty(tokenName);
 
             //assert
-            Assert.Equal(nameof(User.Token), idProperty.GetColumnName());
+            Assert.Equal(tokenName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -152,13 +167,14 @@ namespace Entities.Tests
         public void Must_Set_PasswordHash_To_PasswordHash()
         {
             //arrange
+            const string passwordHashPropName = nameof(User.PasswordHash);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(User.PasswordHash));
+                .FindDeclaredProperty(passwordHashPropName);
 
             //assert
-            Assert.Equal(nameof(User.PasswordHash), idProperty.GetColumnName());
+            Assert.Equal(passwordHashPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -194,13 +210,14 @@ namespace Entities.Tests
         public void Must_Set_PasswordSalt_To_PasswordSalt()
         {
             //arrange
+            const string passwordSaltPropName = nameof(User.PasswordSalt);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(User.PasswordSalt));
+                .FindDeclaredProperty(passwordSaltPropName);
 
             //assert
-            Assert.Equal(nameof(User.PasswordSalt), idProperty.GetColumnName());
+            Assert.Equal(passwordSaltPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -236,13 +253,14 @@ namespace Entities.Tests
         public void Must_Set_Role_To_Role()
         {
             //arrange
+            const string rolePropName = nameof(User.Role);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(User.Role));
+                .FindDeclaredProperty(rolePropName);
 
             //assert
-            Assert.Equal(nameof(User.Role), idProperty.GetColumnName());
+            Assert.Equal(rolePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -278,13 +296,14 @@ namespace Entities.Tests
         public void Must_Set_Citizen_To_Citizen()
         {
             //arrange
+            const string citizenPropName = nameof(User.Citizen);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredNavigation(nameof(User.Citizen));
+                .FindDeclaredNavigation(citizenPropName);
 
             //assert
-            Assert.Equal(nameof(User.Citizen), idProperty.Name);
+            Assert.Equal(citizenPropName, idProperty.Name);
         }
 
         [Fact]
@@ -320,13 +339,14 @@ namespace Entities.Tests
         public void Must_Set_IsActive_To_IsActive()
         {
             //arrange
+            const string isActivePropName = nameof(User.IsActive);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(User.IsActive));
+                .FindDeclaredProperty(isActivePropName);
 
             //assert
-            Assert.Equal(nameof(User.IsActive), idProperty.GetColumnName());
+            Assert.Equal(isActivePropName, idProperty.GetColumnName());
         }
 
         [Fact]

@@ -26,13 +26,14 @@ namespace Entities.Tests
         public void Must_Set_Id_To_Id()
         {
             //arrange
+            const string idPropName = nameof(State.Id);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(State.Id));
+                .FindDeclaredProperty(idPropName);
 
             //assert
-            Assert.Equal("Id", idProperty.GetColumnName());
+            Assert.Equal(idPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -68,13 +69,14 @@ namespace Entities.Tests
         public void Must_Set_Name_To_Name()
         {
             //arrange
+            const string namePropName = nameof(State.Name);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(State.Name));
+                .FindDeclaredProperty(namePropName);
 
             //assert
-            Assert.Equal(nameof(State.Name), idProperty.GetColumnName());
+            Assert.Equal(namePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -149,13 +151,14 @@ namespace Entities.Tests
         public void Must_Set_IsActive_To_IsActive()
         {
             //arrange
+            const string isActivePropName = nameof(State.IsActive);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(State.IsActive));
+                .FindDeclaredProperty(isActivePropName);
 
             //assert
-            Assert.Equal(nameof(State.IsActive), idProperty.GetColumnName());
+            Assert.Equal(isActivePropName, idProperty.GetColumnName());
         }
 
         [Fact]

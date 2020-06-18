@@ -26,13 +26,14 @@ namespace Entities.Tests
         public void Must_Set_Id_To_Id()
         {
             //arrange
+            const string idPropName = nameof(Citizen.Id);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.Id));
+                .FindDeclaredProperty(idPropName);
 
             //assert
-            Assert.Equal("Id", idProperty.GetColumnName());
+            Assert.Equal(idPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -68,13 +69,14 @@ namespace Entities.Tests
         public void Must_Set_FirstName_To_FirstName()
         {
             //arrange
+            const string firstNamePropName = nameof(Citizen.FirstName);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.FirstName));
+                .FindDeclaredProperty(firstNamePropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.FirstName), idProperty.GetColumnName());
+            Assert.Equal(firstNamePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -103,6 +105,19 @@ namespace Entities.Tests
             Assert.False(idProperty.IsKey());
         }
 
+        [Fact]
+        public void Must_Set_FirstName_Max_Length_250()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredProperty(nameof(Citizen.FirstName));
+
+            //assert
+            Assert.Equal(250, idProperty.GetMaxLength());
+        }
+
         /// <summary>
         /// LastName property validations
         /// </summary>
@@ -110,13 +125,14 @@ namespace Entities.Tests
         public void Must_Set_LastName_To_LastName()
         {
             //arrange
+            const string lastNamePropName = nameof(Citizen.LastName);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.LastName));
+                .FindDeclaredProperty(lastNamePropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.LastName), idProperty.GetColumnName());
+            Assert.Equal(lastNamePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -145,6 +161,19 @@ namespace Entities.Tests
             Assert.False(idProperty.IsKey());
         }
 
+        [Fact]
+        public void Must_Set_LastName_Max_Length_250()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredProperty(nameof(Citizen.LastName));
+
+            //assert
+            Assert.Equal(250, idProperty.GetMaxLength());
+        }
+
         /// <summary>
         /// Document property validations
         /// </summary>
@@ -152,13 +181,14 @@ namespace Entities.Tests
         public void Must_Set_Document_To_Document()
         {
             //arrange
+            const string documentPropName = nameof(Citizen.Document);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.Document));
+                .FindDeclaredProperty(documentPropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.Document), idProperty.GetColumnName());
+            Assert.Equal(documentPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -194,13 +224,14 @@ namespace Entities.Tests
         public void Must_Set_Address_To_Address()
         {
             //arrange
+            const string addressPropName = nameof(Citizen.Address);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.Address));
+                .FindDeclaredProperty(addressPropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.Address), idProperty.GetColumnName());
+            Assert.Equal(addressPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -236,13 +267,14 @@ namespace Entities.Tests
         public void Must_Set_Email_To_Email()
         {
             //arrange
+            const string emailPropName = nameof(Citizen.Email);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.Email));
+                .FindDeclaredProperty(emailPropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.Email), idProperty.GetColumnName());
+            Assert.Equal(emailPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -278,13 +310,14 @@ namespace Entities.Tests
         public void Must_Set_CityId_To_CityId()
         {
             //arrange
+            const string cityIdPropName = nameof(Citizen.CityId);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.CityId));
+                .FindDeclaredProperty(cityIdPropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.CityId), idProperty.GetColumnName());
+            Assert.Equal(cityIdPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -320,13 +353,14 @@ namespace Entities.Tests
         public void Must_Set_City_To_City()
         {
             //arrange
+            const string cityPropName = nameof(Citizen.City);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredNavigation(nameof(Citizen.City));
+                .FindDeclaredNavigation(cityPropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.City), idProperty.Name);
+            Assert.Equal(cityPropName, idProperty.Name);
         }
 
         [Fact]
@@ -362,13 +396,14 @@ namespace Entities.Tests
         public void Must_Set_IsActive_To_IsActive()
         {
             //arrange
+            const string isActivePropName = nameof(Citizen.IsActive);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.IsActive));
+                .FindDeclaredProperty(isActivePropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.IsActive), idProperty.GetColumnName());
+            Assert.Equal(isActivePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -404,13 +439,14 @@ namespace Entities.Tests
         public void Must_Set_UserId_To_UserId()
         {
             //arrange
+            const string userIdPropName = nameof(Citizen.UserId);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(Citizen.UserId));
+                .FindDeclaredProperty(userIdPropName);
 
             //assert
-            Assert.Equal(nameof(Citizen.UserId), idProperty.GetColumnName());
+            Assert.Equal(userIdPropName, idProperty.GetColumnName());
         }
 
         [Fact]

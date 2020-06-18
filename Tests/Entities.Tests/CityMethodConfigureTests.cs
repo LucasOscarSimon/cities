@@ -26,13 +26,14 @@ namespace Entities.Tests
         public void Must_Set_Id_To_Id()
         {
             //arrange
+            const string idPropName = nameof(City.Id);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(City.Id));
+                .FindDeclaredProperty(idPropName);
 
             //assert
-            Assert.Equal("Id", idProperty.GetColumnName());
+            Assert.Equal(idPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -68,13 +69,14 @@ namespace Entities.Tests
         public void Must_Set_Name_To_Name()
         {
             //arrange
+            const string namePropName = nameof(City.Name);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(City.Name));
+                .FindDeclaredProperty(namePropName);
 
             //assert
-            Assert.Equal(nameof(City.Name), idProperty.GetColumnName());
+            Assert.Equal(namePropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -110,13 +112,14 @@ namespace Entities.Tests
         public void Must_Set_StateId_To_StateId()
         {
             //arrange
+            const string stateIdPropName = nameof(City.StateId);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(City.StateId));
+                .FindDeclaredProperty(stateIdPropName);
 
             //assert
-            Assert.Equal(nameof(City.StateId), idProperty.GetColumnName());
+            Assert.Equal(stateIdPropName, idProperty.GetColumnName());
         }
 
         [Fact]
@@ -152,13 +155,14 @@ namespace Entities.Tests
         public void Must_Set_State_To_State()
         {
             //arrange
+            const string statePropName = nameof(City.State);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredNavigation(nameof(City.State));
+                .FindDeclaredNavigation(statePropName);
 
             //assert
-            Assert.Equal(nameof(City.State), idProperty.Name);
+            Assert.Equal(statePropName, idProperty.Name);
         }
 
         [Fact]
@@ -236,13 +240,14 @@ namespace Entities.Tests
         public void Must_Set_IsActive_To_IsActive()
         {
             //arrange
+            const string isActivePropName = nameof(City.IsActive);
 
             //act
             var idProperty = _entityTypeBuilder.Metadata
-                .FindDeclaredProperty(nameof(City.IsActive));
+                .FindDeclaredProperty(isActivePropName);
 
             //assert
-            Assert.Equal(nameof(City.IsActive), idProperty.GetColumnName());
+            Assert.Equal(isActivePropName, idProperty.GetColumnName());
         }
 
         [Fact]
