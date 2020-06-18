@@ -146,46 +146,88 @@ namespace Entities.Tests
         }
 
         /// <summary>
-        /// Document property validations
+        /// State property validations
         /// </summary>
-        //[Fact]
-        //public void Must_Set_Document_To_Document()
-        //{
-        //    //arrange
+        [Fact]
+        public void Must_Set_State_To_State()
+        {
+            //arrange
 
-        //    //act
-        //    var idProperty = _entityTypeBuilder.Metadata
-        //        .FindDeclaredProperty(nameof(City.Citizens));
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(City.State));
 
-        //    //assert
-        //    Assert.Equal(nameof(City.Citizens), idProperty.GetColumnName());
-        //}
+            //assert
+            Assert.Equal(nameof(City.State), idProperty.Name);
+        }
 
-        //[Fact]
-        //public void Must_Set_Document_Like_Not_Null()
-        //{
-        //    //arrange
+        [Fact]
+        public void Must_Set_State_Like_Not_Null()
+        {
+            //arrange
 
-        //    //act
-        //    var idProperty = _entityTypeBuilder.Metadata
-        //        .FindDeclaredProperty(nameof(City.Citizens));
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(City.State));
 
-        //    //assert
-        //    Assert.False(idProperty.IsNullable);
-        //}
+            //assert
+            Assert.NotNull(idProperty);
+        }
 
-        //[Fact]
-        //public void Must_Set_Document_Like_No_PrimaryKey()
-        //{
-        //    //arrange
+        [Fact]
+        public void Must_Set_State_Like_Is_Dependent_To_Principal()
+        {
+            //arrange
 
-        //    //act
-        //    var idProperty = _entityTypeBuilder.Metadata
-        //        .FindDeclaredProperty(nameof(City.Citizens));
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(City.State));
 
-        //    //assert
-        //    Assert.False(idProperty.IsKey());
-        //}
+            //assert
+            Assert.True(idProperty.IsDependentToPrincipal());
+        }
+
+        /// <summary>
+        /// Citizens property validations
+        /// </summary>
+        [Fact]
+        public void Must_Set_Citizens_As_Collection()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(City.Citizens));
+
+            //assert
+            Assert.True(idProperty.IsCollection());
+        }
+
+        [Fact]
+        public void Must_Set_Citizens_Like_Not_Null()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(City.Citizens));
+
+            //assert
+            Assert.NotNull(idProperty);
+        }
+
+        [Fact]
+        public void Must_Set_Citizens_Like_Is_Not_Dependent_To_Principal()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(City.Citizens));
+
+            //assert
+            Assert.False(idProperty.IsDependentToPrincipal());
+        }
 
         /// <summary>
         /// IsActive property validations

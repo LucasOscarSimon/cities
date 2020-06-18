@@ -272,6 +272,48 @@ namespace Entities.Tests
         }
 
         /// <summary>
+        /// Citizen property validations
+        /// </summary>
+        [Fact]
+        public void Must_Set_Citizen_To_Citizen()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(User.Citizen));
+
+            //assert
+            Assert.Equal(nameof(User.Citizen), idProperty.Name);
+        }
+
+        [Fact]
+        public void Must_Set_Citizen_Like_Not_Null()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(User.Citizen));
+
+            //assert
+            Assert.NotNull(idProperty);
+        }
+
+        [Fact]
+        public void Must_Set_Citizen_Like_Is_Not_Dependent_To_Principal()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(User.Citizen));
+
+            //assert
+            Assert.False(idProperty.IsDependentToPrincipal());
+        }
+
+        /// <summary>
         /// IsActive property validations
         /// </summary>
         [Fact]

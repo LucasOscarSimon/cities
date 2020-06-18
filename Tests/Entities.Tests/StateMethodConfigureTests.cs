@@ -103,6 +103,48 @@ namespace Entities.Tests
             Assert.False(idProperty.IsKey());
         }
 
+        /// <summary>
+        /// Cities property validations
+        /// </summary>
+        [Fact]
+        public void Must_Set_Cities_As_Collection()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(State.Cities));
+
+            //assert
+            Assert.True(idProperty.IsCollection());
+        }
+
+        [Fact]
+        public void Must_Set_Cities_Like_Not_Null()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(State.Cities));
+
+            //assert
+            Assert.NotNull(idProperty);
+        }
+
+        [Fact]
+        public void Must_Set_Cities_Like_Is_Not_Dependent_To_Principal()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(State.Cities));
+
+            //assert
+            Assert.False(idProperty.IsDependentToPrincipal());
+        }
+
         [Fact]
         public void Must_Set_IsActive_To_IsActive()
         {

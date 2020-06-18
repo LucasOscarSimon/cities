@@ -314,6 +314,48 @@ namespace Entities.Tests
         }
 
         /// <summary>
+        /// City property validations
+        /// </summary>
+        [Fact]
+        public void Must_Set_City_To_City()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(Citizen.City));
+
+            //assert
+            Assert.Equal(nameof(Citizen.City), idProperty.Name);
+        }
+
+        [Fact]
+        public void Must_Set_City_Like_Not_Null()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(Citizen.City));
+
+            //assert
+            Assert.NotNull(idProperty);
+        }
+
+        [Fact]
+        public void Must_Set_City_Like_Is_Dependent_To_Principal()
+        {
+            //arrange
+
+            //act
+            var idProperty = _entityTypeBuilder.Metadata
+                .FindDeclaredNavigation(nameof(Citizen.City));
+
+            //assert
+            Assert.True(idProperty.IsDependentToPrincipal());
+        }
+
+        /// <summary>
         /// IsActive property validations
         /// </summary>
         [Fact]
@@ -396,8 +438,7 @@ namespace Entities.Tests
             //assert
             Assert.False(idProperty.IsKey());
         }
-
-
+        
         /// <summary>
         /// The table should contain 'x' properties
         /// </summary>
