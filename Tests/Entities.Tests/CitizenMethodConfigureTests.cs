@@ -107,7 +107,7 @@ namespace Entities.Tests
         /// LastName property validations
         /// </summary>
         [Fact]
-        public void Must_Set_LastName_To_FirstName()
+        public void Must_Set_LastName_To_LastName()
         {
             //arrange
 
