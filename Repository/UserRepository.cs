@@ -30,7 +30,7 @@ namespace Repository
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = await RepositoryContext.Users.Include(u => u.Citizen).SingleOrDefaultAsync(x => x.UserName == userName);
+            var user = await RepositoryContext.User.Include(u => u.Citizen).SingleOrDefaultAsync(x => x.UserName == userName);
 
             // check if user exists
             if (user is null)
@@ -79,7 +79,7 @@ namespace Repository
             if (string.IsNullOrWhiteSpace(password))
                 throw new Exception("Password is required");
 
-            if (RepositoryContext.Users.Any(c => c.UserName == user.UserName))
+            if (RepositoryContext.User.Any(c => c.UserName == user.UserName))
                 throw new Exception("Username \"" + user.UserName + "\" is already taken");
 
             CreatePasswordHash(password, out var passwordHash, out var passwordSalt);

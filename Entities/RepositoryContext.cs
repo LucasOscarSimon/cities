@@ -10,10 +10,10 @@ namespace Entities
         private readonly IEntityTypeConfiguration<City> _citiesConfiguration;
         private readonly IEntityTypeConfiguration<State> _statesConfiguration;
         public DbContextOptions Options;
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Citizen> Citizens { get; set; }
-        public virtual DbSet<City> Cities { get; set; }
-        public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<Citizen> Citizen { get; set; }
+        public virtual DbSet<City> City { get; set; }
+        public virtual DbSet<State> State { get; set; }
 
 
         public RepositoryContext(DbContextOptions options, 
